@@ -38,8 +38,6 @@ const userSchema: Schema = new Schema({
             default: 'javascript'
         }
     }
-}, {
-    timestamps: true
-});
+}, { timestamps: true });
 
 export default mongoose.model<IUser>('User', userSchema);

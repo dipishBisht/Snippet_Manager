@@ -2,6 +2,11 @@ import express from "express"
 import dotenp from "dotenv";
 import cors from "cors"
 import connectWithDB from "./lib/config/db";
+import { protectedRoute } from "./middleware/auth.middleware";
+import AuthRouter from "./routes/auth.route";
+import CollectionRouter from "./routes/collection.route";
+import SnippetRouter from "./routes/snippet.route";
+
 
 // Load environment variables
 dotenp.config()
@@ -19,6 +24,10 @@ app.use(cors({
 }))
 app.use(express.json())
 
+app.use("/auth", AuthRouter);
+app.use("/collection", protectedRoute, CollectionRouter);
+app.use("/snippet", protectedRoute, SnippetRouter);
+
 // Start server
-const PORT = process.env.PORT || 8080   ;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server started at PORT: ${PORT}`));

@@ -6,7 +6,6 @@ const connectWithDB = async (): Promise<void> => {
         console.log(`Mongo Conected: ${response.connection.host}`);
     } catch (error) {
         console.log(`MONGO Connection error: ${error}`);
-
     }
 }
 
