@@ -9,6 +9,8 @@ import DashboardPage from './pages/dashboard/page.tsx'
 import HomePage from './pages/home/page.tsx'
 import { Toaster } from "@/components/ui/sonner.tsx"
 import { ThemeProvider } from './context/theme/theme-provider.tsx'
+import FeaturesPage from './pages/features/page.tsx'
+import PricingPage from './pages/pricing/page.tsx'
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,14 @@ const router = createBrowserRouter([
         element: <LoginPage />
       },
       {
+        path: "/features",
+        element: <FeaturesPage />
+      },
+      {
+        path: "/pricing",
+        element: <PricingPage />
+      },
+      {
         path: "/dashboard",
         element: <DashboardPage />
       }
@@ -37,7 +47,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="system" storageKey="snippet-manager-theme">
+    <ThemeProvider defaultTheme="light" storageKey="snippet-manager-theme">
       <RouterProvider router={router} />
       <Toaster />
     </ThemeProvider>

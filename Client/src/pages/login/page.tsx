@@ -1,3 +1,7 @@
+"use client"
+
+import type React from "react"
+
 import { useState } from "react"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -7,6 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { LoadingSpinner } from "@/components/loading-spinner"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useToast } from "@/hooks/use-theme"
+import { Link } from "react-router-dom"
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -62,10 +67,10 @@ export default function LoginPage() {
       <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div className="flex flex-col space-y-2 text-center">
-            <a href="/" className="inline-flex items-center gap-2 text-sm font-medium">
+            <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium">
               <ArrowLeft className="h-4 w-4" />
               Back to home
-            </a>
+            </Link>
             <h1 className="text-2xl font-bold tracking-tight">Sign in to your account</h1>
             <p className="text-sm text-muted-foreground">Enter your email below to sign in to your account</p>
           </div>
@@ -92,12 +97,12 @@ export default function LoginPage() {
                 <div>
                   <div className="flex items-center justify-between">
                     <Label htmlFor="password">Password</Label>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="text-sm font-medium hover:underline underline-offset-4 text-primary/80 hover:text-primary transition-colors"
                     >
                       Forgot password?
-                    </a>
+                    </Link>
                   </div>
                   <div className="mt-2">
                     <Input
@@ -188,12 +193,12 @@ export default function LoginPage() {
 
             <div className="mt-6 text-center text-sm">
               Don&apos;t have an account?{" "}
-              <a
-                href="/signup"
+              <Link
+                to="/signup"
                 className="font-medium text-primary/80 hover:text-primary hover:underline underline-offset-4 transition-colors"
               >
                 Sign up
-              </a>
+              </Link>
             </div>
           </div>
         </div>

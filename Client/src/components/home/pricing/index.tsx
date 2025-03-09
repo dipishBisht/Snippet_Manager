@@ -1,144 +1,257 @@
-import { Check } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
-export default function PricingPage() {
-  const plans = [
-    {
-      name: "Free",
-      price: "$0",
-      description: "Perfect for individuals just getting started",
-      features: ["Up to 50 snippets", "Basic search functionality", "Public sharing", "5 tags", "Community support"],
-      cta: "Get Started",
-      popular: false,
-    },
-    {
-      name: "Pro",
-      price: "$9",
-      period: "per month",
-      description: "For power users who need more snippets and features",
-      features: [
-        "Unlimited snippets",
-        "Advanced search",
-        "Private snippets",
-        "Team sharing",
-        "Unlimited tags",
-        "Folder organization",
-        "Version history",
-        "Priority support",
-      ],
-      cta: "Start Free Trial",
-      popular: true,
-    },
-    {
-      name: "Team",
-      price: "$19",
-      period: "per user/month",
-      description: "For teams that need to collaborate on snippets",
-      features: [
-        "Everything in Pro",
-        "Team management",
-        "Advanced permissions",
-        "Shared workspaces",
-        "Team analytics",
-        "SSO authentication",
-        "API access",
-        "Dedicated support",
-      ],
-      cta: "Contact Sales",
-      popular: false,
-    },
-  ]
-
+export default function Pricing() {
   return (
-    <div className="container mx-auto px-4 py-16 md:py-24">
-      <div className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Simple, Transparent Pricing</h1>
-        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Choose the plan that's right for you. All plans include a 14-day free trial.
-        </p>
-      </div>
-
-      <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        {plans.map((plan, index) => (
-          <div
-            key={index}
-            className={`rounded-lg border bg-card shadow-sm overflow-hidden relative ${
-              plan.popular ? "ring-2 ring-primary" : ""
-            }`}
-          >
-            {plan.popular && (
-              <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs font-medium px-3 py-1 rounded-bl-lg">
-                Most Popular
-              </div>
-            )}
-            <div className="p-6">
-              <h3 className="text-2xl font-bold">{plan.name}</h3>
-              <div className="mt-4 flex items-baseline">
-                <span className="text-4xl font-bold">{plan.price}</span>
-                {plan.period && <span className="ml-1 text-sm text-muted-foreground">{plan.period}</span>}
-              </div>
-              <p className="mt-2 text-sm text-muted-foreground">{plan.description}</p>
-
-              <ul className="mt-6 space-y-3">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center">
-                    <Check className="mr-2 h-4 w-4 text-primary" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-8">
-                <Button
-                  className={`w-full ${plan.popular ? "bg-primary" : ""}`}
-                  variant={plan.popular ? "default" : "outline"}
-                >
-                  {plan.cta}
-                </Button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-24 max-w-3xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
-
-        <div className="space-y-6">
-          <div className="rounded-lg border p-6">
-            <h3 className="text-lg font-bold">Can I switch plans later?</h3>
-            <p className="mt-2 text-muted-foreground">
-              Yes, you can upgrade or downgrade your plan at any time. If you upgrade, the new pricing will be prorated
-              for the remainder of your billing cycle.
-            </p>
-          </div>
-
-          <div className="rounded-lg border p-6">
-            <h3 className="text-lg font-bold">What happens if I exceed my snippet limit?</h3>
-            <p className="mt-2 text-muted-foreground">
-              On the Free plan, you won't be able to create new snippets once you reach the 50 snippet limit. You'll
-              need to upgrade to the Pro plan for unlimited snippets or delete existing snippets.
-            </p>
-          </div>
-
-          <div className="rounded-lg border p-6">
-            <h3 className="text-lg font-bold">Do you offer discounts for annual billing?</h3>
-            <p className="mt-2 text-muted-foreground">
-              Yes, we offer a 20% discount when you choose annual billing. This option is available for both Pro and
-              Team plans.
-            </p>
-          </div>
-
-          <div className="rounded-lg border p-6">
-            <h3 className="text-lg font-bold">Is there a limit to how many team members I can add?</h3>
-            <p className="mt-2 text-muted-foreground">
-              No, there's no limit to the number of team members you can add on the Team plan. You'll be billed per user
-              per month.
+    <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+      <div className="container px-4 md:px-6">
+        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Simple, Transparent Pricing</h2>
+            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              Choose the plan that's right for you. All plans include a 14-day free trial.
             </p>
           </div>
         </div>
+        <div className="mx-auto grid max-w-5xl gap-6 py-12 lg:grid-cols-3">
+          <div className="flex flex-col rounded-lg border bg-card shadow-sm">
+            <div className="p-6">
+              <h3 className="text-2xl font-bold">Free</h3>
+              <div className="mt-4 text-4xl font-bold">$0</div>
+              <p className="mt-1 text-sm text-muted-foreground">Forever free</p>
+              <ul className="mt-6 space-y-3">
+                <li className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 h-4 w-4 text-primary"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Up to 50 snippets
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 h-4 w-4 text-primary"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Basic search
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 h-4 w-4 text-primary"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Public sharing
+                </li>
+              </ul>
+              <div className="mt-6">
+                <Link to="/signup">
+                  <Button className="w-full" variant="outline">
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col rounded-lg border bg-card shadow-sm relative">
+            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-0 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
+              Popular
+            </div>
+            <div className="p-6">
+              <h3 className="text-2xl font-bold">Pro</h3>
+              <div className="mt-4 text-4xl font-bold">$9</div>
+              <p className="mt-1 text-sm text-muted-foreground">Per month, billed annually</p>
+              <ul className="mt-6 space-y-3">
+                <li className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 h-4 w-4 text-primary"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Unlimited snippets
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 h-4 w-4 text-primary"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Advanced search
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 h-4 w-4 text-primary"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Private snippets
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 h-4 w-4 text-primary"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Team sharing
+                </li>
+              </ul>
+              <div className="mt-6">
+                <Link to="/signup">
+                  <Button className="w-full">Get Started</Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col rounded-lg border bg-card shadow-sm">
+            <div className="p-6">
+              <h3 className="text-2xl font-bold">Team</h3>
+              <div className="mt-4 text-4xl font-bold">$19</div>
+              <p className="mt-1 text-sm text-muted-foreground">Per user/month, billed annually</p>
+              <ul className="mt-6 space-y-3">
+                <li className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 h-4 w-4 text-primary"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Everything in Pro
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 h-4 w-4 text-primary"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Team management
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 h-4 w-4 text-primary"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Advanced permissions
+                </li>
+                <li className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 h-4 w-4 text-primary"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Priority support
+                </li>
+              </ul>
+              <div className="mt-6">
+                <Link to="/signup">
+                  <Button className="w-full" variant="outline">
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
-

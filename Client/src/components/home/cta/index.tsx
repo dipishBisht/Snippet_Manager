@@ -17,18 +17,13 @@ export default function Cta() {
                         <Link to="/signup">
                             <Button
                                 size="lg"
-                                variant="secondary"
-                                className="gap-1.5 bg-white text-primary hover:bg-white/90 transition-all duration-300"
+                                className="gap-1.5 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary transition-all duration-300"
                             >
                                 Get Started <ArrowRight className="h-4 w-4" />
                             </Button>
                         </Link>
                         <Link to="/login">
-                            <Button
-                                size="lg"
-                                variant="outline"
-                                className="bg-transparent border-white text-white hover:bg-white/10 transition-all duration-300"
-                            >
+                            <Button size="lg" variant="outline" className="transition-all duration-300 text-foreground">
                                 Log in
                             </Button>
                         </Link>

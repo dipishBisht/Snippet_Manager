@@ -7,7 +7,7 @@ import { vscDarkPlus, vs } from "react-syntax-highlighter/dist/esm/styles/prism"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-theme"
-import { useTheme } from "next-themes"
+import { useTheme } from "@/context/theme/theme-provider"
 
 interface EnhancedCodeBlockProps {
   code: string

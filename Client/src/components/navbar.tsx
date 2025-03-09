@@ -32,7 +32,6 @@ export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const { pathname } = useLocation()
-
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     // Check if user is logged in (in a real app, this would use auth state)

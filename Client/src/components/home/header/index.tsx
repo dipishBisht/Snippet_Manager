@@ -1,8 +1,7 @@
+import { EnhancedCodeBlock } from '@/components/enhanced-code-block';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export default function Header() {
   const codeString = `// Snippet Manager
@@ -20,42 +19,6 @@ export default function Header() {
       });
       return id;
     },
-    
-    getSnippet(id) {
-      return this.snippets.find(
-        snippet => snippet.id === id
-      );
-    },
-    
-    getAllSnippets() {
-      return this.snippets;
-    },
-    
-    updateSnippet(id, updates) {
-      const index = this.snippets.findIndex(
-        snippet => snippet.id === id
-      );
-      if (index !== -1) {
-        this.snippets[index] = {
-          ...this.snippets[index],
-          ...updates,
-          updatedAt: new Date(),
-        };
-        return true;
-      }
-      return false;
-    },
-    
-    deleteSnippet(id) {
-      const index = this.snippets.findIndex(
-        snippet => snippet.id === id
-      );
-      if (index !== -1) {
-        this.snippets.splice(index, 1);
-        return true;
-      }
-      return false;
-    }
   };`
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-br from-primary/10 via-background to-primary/5 animate-gradient">
@@ -99,12 +62,8 @@ export default function Header() {
                     <div className="ml-2 text-sm font-medium">snippet-manager.js</div>
                   </div>
                 </div>
-                <div className="p-4 font-mono text-sm overflow-hidden">
-                  {/* <pre className="text-xs md:text-sm"> */}
-                  <SyntaxHighlighter language="javascript" style={solarizedlight}>
-                    {codeString}
-                  </SyntaxHighlighter>
-                  {/* </pre> */}
+                <div className="p-4   font-mono text-sm overflow-hidden">
+                  <EnhancedCodeBlock code={codeString} language='js' showLineNumbers={false}/>
                 </div>
               </div>
             </div>
