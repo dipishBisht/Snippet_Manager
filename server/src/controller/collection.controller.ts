@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
-import CollectionModel from "../models/Collection.model";
+import CollectionEntity from "../models/Collection.model";
 import { createCollectionBody } from "../lib/validation/collection.validation";
+import UserEntity from "../models/User.model";
 
 export async function getCollectionById(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
 
     try {
-        const isCollectionExist = await CollectionModel.findById(id);
+        const isCollectionExist = await CollectionEntity.findById(id);
 
         if (!isCollectionExist) {
             return res.status(400).json({ success: false, message: "No collection with this id exists." });
@@ -21,7 +22,7 @@ export async function getCollectionById(req: Request, res: Response): Promise<an
 
 export async function getAllCollection(_: Request, res: Response): Promise<any> {
     try {
-        const collecetions = await CollectionModel.find({});
+        const collecetions = await CollectionEntity.find({});
         return res.status(200).json({ success: true, collecetions });
     } catch (error) {
         console.error("GET ALL COLLECTIONS ERROR :", error);
@@ -40,12 +41,16 @@ export async function createCollection(req: Request, res: Response): Promise<any
         if (!success)
             return res.status(400).json({ success: false, message: "Invalid credentials !" });
 
-        const isCollectionExists = await CollectionModel.findOne({ name });
+        const isCollectionExists = await CollectionEntity.findOne({ name });
 
         if (isCollectionExists)
             return res.status(400).json({ success: false, message: "Collection with this name already exists" });
 
-        await CollectionModel.create({ name, description, isPublic, owner });
+        const user = await CollectionEntity.create({ name, description, isPublic, owner });
+
+        await UserEntity.findByIdAndUpdate(owner, {
+            $push: { collections: user._id }
+        });
 
         return res.status(201).json({ success: true, message: "Collection created successfully" });
     } catch (error) {

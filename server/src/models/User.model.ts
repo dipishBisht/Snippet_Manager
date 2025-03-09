@@ -1,5 +1,6 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 import { IUser } from "../types";
+import { UserModel } from "../lib/constants";
 
 
 const userSchema: Schema = new Schema({
@@ -37,7 +38,13 @@ const userSchema: Schema = new Schema({
             type: String,
             default: 'javascript'
         }
+    },
+    collections: {
+        type: [Types.ObjectId],
+        default: []
     }
 }, { timestamps: true });
 
-export default mongoose.model<IUser>('User', userSchema);
+const UserEntity = mongoose.model<IUser>(UserModel, userSchema);
+
+export default UserEntity;

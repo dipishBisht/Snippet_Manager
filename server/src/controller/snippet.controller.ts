@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
-import SnippetModel from "../models/Snippet.model";
+import SnippetEntity from "../models/Snippet.model";
 import { createSnippetBody } from "../lib/validation/snippet.validation";
+import CollectionEntity from "../models/Collection.model";
 
 
 export async function getSnippetById(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
 
     try {
-        const isSnippetExist = await SnippetModel.findById(id);
+        const isSnippetExist = await SnippetEntity.findById(id);
 
         if (!isSnippetExist) {
             return res.status(400).json({ success: false, message: "No snippet with this id exists." });
@@ -22,7 +23,7 @@ export async function getSnippetById(req: Request, res: Response): Promise<any> 
 
 export async function getAllSnippet(_: Request, res: Response): Promise<any> {
     try {
-        const snippets = await SnippetModel.find({});
+        const snippets = await SnippetEntity.find({});
         return res.status(200).json({ success: true, snippets });
     } catch (error) {
         console.error("GET ALL SNIPPET ERROR :", error);
@@ -41,12 +42,16 @@ export async function createSnippet(req: Request, res: Response): Promise<any> {
         if (!success)
             return res.status(400).json({ success: false, message: "Invalid credentials !" });
 
-        const isSnippetExists = await SnippetModel.findOne({ title });
+        const isSnippetExists = await SnippetEntity.findOne({ title });
 
         if (isSnippetExists)
             return res.status(400).json({ success: false, message: "Snippet with this title already exists" });
 
-        await SnippetModel.create({ title, content, language, description, tags, owner, collectionId, isPublic, stars, viewCount });
+        const snippet = await SnippetEntity.create({ title, content, language, description, tags, owner, collectionId, isPublic, stars, viewCount });
+
+        await CollectionEntity.findByIdAndUpdate(collectionId, {
+            $push: { snippet: snippet._id }
+        });
 
         return res.status(201).json({ success: true, message: "Snippet created successfully" });
     } catch (error) {

@@ -1,5 +1,6 @@
 import mongoose, { Schema, Types } from "mongoose";
 import { ICollection } from "../types";
+import { CollectionModel } from "../lib/constants";
 
 const collectionSchema: Schema = new Schema({
     name: {
@@ -20,8 +21,14 @@ const collectionSchema: Schema = new Schema({
     isPublic: {
         type: Boolean,
         required: true
+    },
+    snippet: {
+        type: [Types.ObjectId],
+        default: []
     }
 
 }, { timestamps: true });
 
-export default mongoose.model<ICollection>("Collection", collectionSchema);
+const CollectionEntity = mongoose.model<ICollection>(CollectionModel, collectionSchema);
+
+export default CollectionEntity;

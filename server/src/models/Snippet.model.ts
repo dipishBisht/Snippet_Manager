@@ -1,5 +1,6 @@
 import mongoose, { Schema, Types } from "mongoose";
 import { ISnippet } from "../types";
+import { SnippetModel } from "../lib/constants";
 
 const snippetSchema: Schema = new Schema({
     title: {
@@ -49,4 +50,6 @@ const snippetSchema: Schema = new Schema({
     }
 }, { timestamps: true })
 
-export default mongoose.model<ISnippet>("Snippet", snippetSchema);
+const SnippetEntity = mongoose.model<ISnippet>(SnippetModel, snippetSchema);
+
+export default SnippetEntity;

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import UserModel from "../models/User.model";
+import UserEntity from "../models/User.model";
 import { signInBody, signupBody } from "../lib/validation";
 import { generateToken, hashPassword, validatePassword } from "../lib/utils";
 
@@ -22,7 +22,7 @@ export async function getUserById(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
 
     try {
-        const isUserExist = await UserModel.findById(id);
+        const isUserExist = await UserEntity.findById(id);
 
         if (!isUserExist) {
             return res.status(400).json({ success: false, message: "No user with this id exists." });
@@ -37,7 +37,7 @@ export async function getUserById(req: Request, res: Response): Promise<any> {
 
 export async function getAllUsers(_: Request, res: Response): Promise<any> {
     try {
-        const users = await UserModel.find({});
+        const users = await UserEntity.find({});
         return res.status(200).json({ success: true, users });
     } catch (error) {
         console.error("GET ALL USERS ERROR :", error);
@@ -57,13 +57,13 @@ export async function signUpUser(req: Request, res: Response): Promise<any> {
             });
         }
 
-        const isUserExistWithEmail = await UserModel.findOne({ email });
+        const isUserExistWithEmail = await UserEntity.findOne({ email });
 
         if (isUserExistWithEmail) {
             return res.status(400).json({ success: false, message: "User with this email already exist" });
         }
 
-        const isUserExistWithUsername = await UserModel.findOne({ username });
+        const isUserExistWithUsername = await UserEntity.findOne({ username });
 
         if (isUserExistWithUsername) {
             return res.status(400).json({ success: false, message: "User with this username already exist" });
@@ -71,7 +71,7 @@ export async function signUpUser(req: Request, res: Response): Promise<any> {
 
         const hashedPassword = await hashPassword(password);
 
-        const newUser = new UserModel({
+        const newUser = new UserEntity({
             username: username.toLowerCase(),
             email: email,
             password: hashedPassword
@@ -100,7 +100,7 @@ export async function loginInUser(req: Request, res: Response): Promise<any> {
             });
         }
 
-        const isUserExist = await UserModel.findOne({ email });
+        const isUserExist = await UserEntity.findOne({ email });
 
         if (!isUserExist) {
             return res.status(400).json({ success: false, message: "Invalid credentials !" })
