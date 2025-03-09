@@ -1,10 +1,15 @@
+import { Outlet } from "react-router-dom"
+import Footer from "./components/footer"
 
 function App() {
 
   return (
-    <h1 className="te">
-      Hello world
-    </h1>
+    <>
+      <main className=" ">
+        <Outlet />
+      </main>
+      <Footer />
+    </>
   )
 }
 
