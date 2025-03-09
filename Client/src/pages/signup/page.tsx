@@ -1,77 +1,81 @@
-"use client"
-
-import type React from "react"
-
 import { useState } from "react"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
 import { LoadingSpinner } from "@/components/loading-spinner"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { useToast } from "@/hooks/use-theme"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import API from "@/utils/axios"
+import { handleError, handleSuccess } from "@/utils/handller"
 
 export default function SignupPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
+        username: "",
         email: "",
         password: "",
         confirmPassword: "",
-        terms: false,
     })
-    const { toast } = useToast()
+    const navigate = useNavigate();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setFormData((prev) => ({ ...prev, [name]: value }))
     }
 
-    const handleCheckboxChange = (checked: boolean) => {
-        setFormData((prev) => ({ ...prev, terms: checked }))
-    }
-
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        // Basic validation
-        if (formData.password !== formData.confirmPassword) {
-            toast({
-                title: "Passwords don't match",
-                description: "Please make sure your passwords match.",
-                variant: "destructive",
-            })
-            return
+        const { username, email, password, confirmPassword } = formData;
+
+        // Basic validations
+        if (!username || !email || !password || !confirmPassword) {
+            handleError("All fields are required.");
+            return;
         }
 
-        setIsLoading(true)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            handleError("Please enter a valid email.");
+            return;
+        }
+
+        if (password.length < 8) {
+            handleError("Password must be atleast 8 character long.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            handleError("Passwords Don't Match");
+            return;
+        }
+
+        setIsLoading(true);
 
         try {
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 1500))
+            const response = await API.post("/auth/signup", {
+                email: formData.email, username: formData.username.toLowerCase(), password: formData.password
+            }
+            );
 
-            // For demo purposes, just show a success toast
-            toast({
-                title: "Account created",
-                description: "Welcome to Snippet Manager!",
-                variant: "success",
-            })
+            if (!response.data?.success) {
+                handleError(response.data.message);
+            }
 
-            // In a real app, you would redirect to the dashboard
-            window.location.href = "/dashboard"
-        } catch (error) {
-            toast({
-                title: "Sign up failed",
-                description: "There was a problem creating your account.",
-                variant: "destructive",
-            })
+            handleSuccess("Account Created Successfully !");
+
+            setTimeout(() => {
+                navigate("/login");
+            }, 2000)
+
+        } catch (error: any) {
+            handleError(error.response.data.message);
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
+    };
+
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -91,38 +95,20 @@ export default function SignupPage() {
                     <div className="mt-10">
                         <div className="mt-6">
                             <form onSubmit={handleSubmit} className="space-y-6">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <Label htmlFor="firstName">First name</Label>
-                                        <div className="mt-2">
-                                            <Input
-                                                id="firstName"
-                                                name="firstName"
-                                                type="text"
-                                                autoComplete="given-name"
-                                                required
-                                                placeholder="John"
-                                                value={formData.firstName}
-                                                onChange={handleChange}
-                                                className="transition-all duration-200"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="lastName">Last name</Label>
-                                        <div className="mt-2">
-                                            <Input
-                                                id="lastName"
-                                                name="lastName"
-                                                type="text"
-                                                autoComplete="family-name"
-                                                required
-                                                placeholder="Doe"
-                                                value={formData.lastName}
-                                                onChange={handleChange}
-                                                className="transition-all duration-200"
-                                            />
-                                        </div>
+                                <div>
+                                    <Label htmlFor="username">Username</Label>
+                                    <div className="mt-2">
+                                        <Input
+                                            id="username"
+                                            name="username"
+                                            type="text"
+                                            autoComplete="given-name"
+                                            required
+                                            placeholder="John"
+                                            value={formData.username}
+                                            onChange={handleChange}
+                                            className="transition-all duration-200"
+                                        />
                                     </div>
                                 </div>
 
@@ -175,26 +161,6 @@ export default function SignupPage() {
                                             className="transition-all duration-200"
                                         />
                                     </div>
-                                </div>
-
-                                <div className="flex items-center space-x-2">
-                                    <Checkbox id="terms" checked={formData.terms} onCheckedChange={handleCheckboxChange} required />
-                                    <Label htmlFor="terms" className="text-sm">
-                                        I agree to the{" "}
-                                        <Link
-                                            to="#"
-                                            className="font-medium text-primary/80 hover:text-primary hover:underline underline-offset-4 transition-colors"
-                                        >
-                                            Terms of Service
-                                        </Link>{" "}
-                                        and{" "}
-                                        <Link
-                                            to="#"
-                                            className="font-medium text-primary/80 hover:text-primary hover:underline underline-offset-4 transition-colors"
-                                        >
-                                            Privacy Policy
-                                        </Link>
-                                    </Label>
                                 </div>
 
                                 <div>

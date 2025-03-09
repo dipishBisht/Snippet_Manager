@@ -4,6 +4,19 @@ import { signInBody, signupBody } from "../lib/validation";
 import { generateToken, hashPassword, validatePassword } from "../lib/utils";
 
 
+export async function getLoginUser(req: Request, res: Response): Promise<any> {
+    try {
+        const { user } = req;
+        if (!user)
+            return res.status(400).json({ success: false, message: "No user found" })
+
+        return res.status(200).json({ success: true, user })
+    } catch (error) {
+        console.log("GET LOGIN USER ERROR :", error);
+
+        return res.status(500).json({ success: false, messsage: "Internal Server Error" });
+    }
+}
 
 export async function getUserById(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
@@ -59,7 +72,7 @@ export async function signUpUser(req: Request, res: Response): Promise<any> {
         const hashedPassword = await hashPassword(password);
 
         const newUser = new UserModel({
-            username: username,
+            username: username.toLowerCase(),
             email: email,
             password: hashedPassword
         });

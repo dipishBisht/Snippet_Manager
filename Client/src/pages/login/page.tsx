@@ -1,59 +1,66 @@
-"use client"
-
-import type React from "react"
-
 import { useState } from "react"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
 import { LoadingSpinner } from "@/components/loading-spinner"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { useToast } from "@/hooks/use-theme"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { handleError, handleSuccess } from "@/utils/handller"
+import API from "@/utils/axios"
+import { useUser } from "@/context/user/user-context"
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    rememberMe: false,
   })
-  const { toast } = useToast()
+  const { addToken } = useUser();
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleCheckboxChange = (checked: boolean) => {
-    setFormData((prev) => ({ ...prev, rememberMe: checked }))
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    const { email, password } = formData;
+
+    // Basic validations
+    if (!email || !password) {
+      handleError("All fields are required.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      handleError("Please enter a valid email.");
+      return;
+    }
+
     setIsLoading(true)
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
 
-      // For demo purposes, just show a success toast
-      toast({
-        title: "Login successful",
-        description: "Welcome back to Snippet Manager!",
-        variant: "success",
-      })
+      const response = await API.post("/auth/login", {
+        email, password
+      });
 
-      // In a real app, you would redirect to the dashboard
-      window.location.href = "/dashboard"
-    } catch (error) {
-      toast({
-        title: "Login failed",
-        description: "Please check your credentials and try again.",
-        variant: "destructive",
-      })
+      if (!response.data?.success)
+        handleError(response.data.message);
+
+      handleSuccess("Signup Successfully !");
+      addToken(response.data.token);
+
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000)
+    } catch (error: any) {
+      handleError(error.response.data.message);
     } finally {
       setIsLoading(false)
     }
@@ -117,13 +124,6 @@ export default function LoginPage() {
                       className="transition-all duration-200"
                     />
                   </div>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="remember" checked={formData.rememberMe} onCheckedChange={handleCheckboxChange} />
-                  <Label htmlFor="remember" className="text-sm">
-                    Remember me
-                  </Label>
                 </div>
 
                 <div>

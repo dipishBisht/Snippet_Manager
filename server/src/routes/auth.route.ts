@@ -1,7 +1,11 @@
 import { Router } from "express"
-import { getAllUsers, getUserById, loginInUser, signUpUser } from "../controller/auth.controller";
+import { getAllUsers, getLoginUser, getUserById, loginInUser, signUpUser } from "../controller/auth.controller";
+import { protectedRoute } from "../middleware/auth.middleware";
 
 const router = Router();
+
+// Get login user
+router.get("/me", protectedRoute, getLoginUser);
 
 // Get user by id
 router.get("/:id", getUserById)
