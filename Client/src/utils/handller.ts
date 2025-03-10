@@ -7,3 +7,7 @@ export function handleSuccess(message: string) {
 export function handleError(message: string) {
     return toast.error(message);
 }
+
+export function handleWarning(message: string) {
+    return toast.warning(message);
+}

@@ -1,8 +1,8 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { ISnippet } from "../types";
 import { SnippetModel } from "../lib/constants";
 
-const snippetSchema: Schema = new Schema({
+const snippetSchema: Schema = new Schema<ISnippet>({
     title: {
         type: String,
         required: true,
@@ -29,16 +29,20 @@ const snippetSchema: Schema = new Schema({
         default: []
     },
     owner: {
-        type: Types.ObjectId,
+        type: Schema.Types.ObjectId,
         required: true
     },
     collectionId: {
-        type: Types.ObjectId,
+        type: Schema.Types.ObjectId,
         required: true
     },
     isPublic: {
         type: Boolean,
         required: true
+    },
+    isStarred: {
+        type: Boolean,
+        default: false
     },
     stars: {
         type: Number,

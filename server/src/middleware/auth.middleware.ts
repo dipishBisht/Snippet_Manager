@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { AuthUser, DecodedToken } from "../types/auth.types";
-import UserModel from "../models/User.model";
+import UserEntity from "../models/User.model";
 
 
 
@@ -32,7 +32,7 @@ export const protectedRoute = async (
         if (!decoded?.email)
             return res.status(401).json({ success: false, message: "Unauthorized - Invalid token" });
 
-        const user = await UserModel.findOne({ email: decoded.email }).select("_id email username") as AuthUser;
+        const user = await UserEntity.findOne({ email: decoded.email }).select("_id email username") as AuthUser;
 
         if (!user)
             return res.status(404).json({ success: false, message: "User not found" });

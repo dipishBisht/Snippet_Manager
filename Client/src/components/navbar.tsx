@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { Link, useLocation } from "react-router-dom"
+import { useUser } from "@/context/user/user-context"
 
 const navLinks = [
     { href: "/", label: "Home" },
@@ -33,6 +34,7 @@ export function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const { pathname } = useLocation()
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const { logout } = useUser();
 
     // Check if user is logged in (in a real app, this would use auth state)
     useEffect(() => {
@@ -122,7 +124,7 @@ export function Navbar() {
                                         Settings
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem>
+                                    <DropdownMenuItem onClick={logout}>
                                         <LogOut className="mr-2 h-4 w-4" />
                                         Log out
                                     </DropdownMenuItem>

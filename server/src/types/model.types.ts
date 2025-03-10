@@ -33,6 +33,7 @@ export interface ISnippet extends Document {
     owner: Types.ObjectId;
     collectionId: Types.ObjectId;
     isPublic: boolean;
+    isStarred?:boolean;
     stars?: number;
     viewCount?: number;
 }

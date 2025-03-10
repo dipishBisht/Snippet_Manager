@@ -1,6 +1,7 @@
 import mongoose, { Schema, Types } from "mongoose";
 import { ICollection } from "../types";
-import { CollectionModel } from "../lib/constants";
+import { CollectionModel, SnippetModel } from "../lib/constants";
+import UserEntity from "./User.model";
 
 const collectionSchema: Schema = new Schema({
     name: {
@@ -16,7 +17,8 @@ const collectionSchema: Schema = new Schema({
     },
     owner: {
         type: Types.ObjectId,
-        required: true
+        required: true,
+        ref: UserEntity
     },
     isPublic: {
         type: Boolean,
@@ -24,7 +26,8 @@ const collectionSchema: Schema = new Schema({
     },
     snippet: {
         type: [Types.ObjectId],
-        default: []
+        default: [],
+        ref: SnippetModel
     }
 
 }, { timestamps: true });

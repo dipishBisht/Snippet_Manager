@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import UserEntity from "../models/User.model";
 import { signInBody, signupBody } from "../lib/validation";
 import { generateToken, hashPassword, validatePassword } from "../lib/utils";
+import { OAuth2Client } from "google-auth-library";
+import jwt from "jsonwebtoken";
 
 
 export async function getLoginUser(req: Request, res: Response): Promise<any> {
@@ -124,5 +126,46 @@ export async function loginInUser(req: Request, res: Response): Promise<any> {
     } catch (error) {
         console.error("LOGIN ERROR :", error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
+export async function googleAuthtication(req: Request, res: Response): Promise<any> {
+
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+    try {
+        const { token } = req.body;
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload();
+        if (!payload) {
+            return res.status(400).json({ success: false, message: "Invalid token payload" });
+        }
+
+        const { email, name, sub } = payload;
+
+        let user = await UserEntity.findOne({ email });
+        console.log(sub);
+
+        if (user) {
+            // Login User
+            console.log("Login user");
+
+            // user = await UserEntity.create({ googleId: sub, email, name });
+        } else {
+            // Create User
+            console.log("Create user");
+
+        }
+
+        // const authToken = generateToken()
+
+        // res.json({ success: true, token: authToken });
+    } catch (error) {
+        console.error("Google Auth Error:", error);
+        res.status(500).json({ success: false, message: "Authentication failed" });
     }
 }

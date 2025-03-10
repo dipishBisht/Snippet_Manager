@@ -33,11 +33,11 @@ export async function getAllSnippet(_: Request, res: Response): Promise<any> {
 
 export async function createSnippet(req: Request, res: Response): Promise<any> {
     try {
-        const { title, content, language, description, tags, collectionId, isPublic, viewCount, stars } = req.body;
+        const { title, content, language, description, tags, collectionId, isPublic, isStarred, viewCount, stars } = req.body;
         const owner = req.user?._id;
 
 
-        const { success } = createSnippetBody.safeParse({ title, content, language, description, tags, owner, collectionId, isPublic, stars, viewCount });
+        const { success } = createSnippetBody.safeParse({ title, content, language, description, tags, collectionId, isPublic });
 
         if (!success)
             return res.status(400).json({ success: false, message: "Invalid credentials !" });
@@ -47,7 +47,7 @@ export async function createSnippet(req: Request, res: Response): Promise<any> {
         if (isSnippetExists)
             return res.status(400).json({ success: false, message: "Snippet with this title already exists" });
 
-        const snippet = await SnippetEntity.create({ title, content, language, description, tags, owner, collectionId, isPublic, stars, viewCount });
+        const snippet = await SnippetEntity.create({ title, content, language, description, tags, owner, collectionId, isPublic, isStarred, stars, viewCount });
 
         await CollectionEntity.findByIdAndUpdate(collectionId, {
             $push: { snippet: snippet._id }

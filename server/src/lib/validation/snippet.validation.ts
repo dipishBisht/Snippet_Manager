@@ -7,9 +7,7 @@ export const createSnippetBody = zod.object({
     language: zod.string().min(1).trim(),
     description: zod.string().trim().optional(),
     tags: zod.array(zod.string()).optional(),
-    owner: zod.string().min(1).trim().transform((val) => new mongoose.Types.ObjectId(val)),
     collectionId: zod.string().min(1).trim().transform((val) => new mongoose.Types.ObjectId(val)),
     isPublic: zod.boolean(),
-    stars: zod.number().default(0),
-    viewCount: zod.number().default(0)
+    isStarred: zod.boolean().default(false),
 })

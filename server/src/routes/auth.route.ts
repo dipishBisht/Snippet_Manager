@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { getAllUsers, getLoginUser, getUserById, loginInUser, signUpUser } from "../controller/auth.controller";
+import { getAllUsers, getLoginUser, getUserById, googleAuthtication, loginInUser, signUpUser } from "../controller/auth.controller";
 import { protectedRoute } from "../middleware/auth.middleware";
 
 const router = Router();
@@ -18,6 +18,9 @@ router.post("/signup", signUpUser);
 
 // Login user
 router.post("/login", loginInUser);
+
+// google authentication
+router.post("/google", googleAuthtication);
 
 
 // TODO Update user

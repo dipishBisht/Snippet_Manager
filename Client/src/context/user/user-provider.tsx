@@ -2,6 +2,7 @@ import API from "@/utils/axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./user-context";
+import { handleSuccess } from "@/utils/handller";
 
 // Define user data type
 interface User {
@@ -21,6 +22,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Add token to localStorage and API headers
     const addToken = (newToken: string) => {
+        if (!newToken) return;
         localStorage.setItem(ACCESS_TOKEN_KEY, newToken);
         setToken(newToken);
         API.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
@@ -36,7 +38,12 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Fetch user data on mount if token exists
     useEffect(() => {
         const fetchUser = async () => {
+
+            if (user) return;
+
+
             const storedToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+
             if (!storedToken) {
                 setIsLoading(false);
                 return;
@@ -52,6 +59,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 console.error("Failed to fetch user:", error.response?.data || error);
                 if (error.response?.status === 401) {
                     removeToken();
+                    handleSuccess("Logout successfully")
                     setUser(null);
                 }
             } finally {
@@ -59,13 +67,16 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
         };
 
-        fetchUser();
-    }, []);
+        if (!user) {
+            fetchUser();
+        }
+    }, [user]);
 
     // Logout function
     const logout = async () => {
         try {
             removeToken();
+            handleSuccess("Logout successfully")
             setUser(null);
             navigate("/");
         } catch (error) {

@@ -1,7 +1,12 @@
 import { Router } from "express";
-import { createCollection, getAllCollection, getCollectionById } from "../controller/collection.controller";
+import { createCollection, getAllCollection, getCollectionById, getUserCollections } from "../controller/collection.controller";
+import { protectedRoute } from "../middleware/auth.middleware";
 
 const router = Router();
+
+// Get my collection
+router.get("/my-collections", protectedRoute, getUserCollections);
+
 
 // Get collection by id
 router.get("/:id", getCollectionById);

@@ -1,9 +1,9 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IUser } from "../types";
-import { UserModel } from "../lib/constants";
+import { CollectionModel, UserModel } from "../lib/constants";
 
 
-const userSchema: Schema = new Schema({
+const userSchema: Schema = new Schema<IUser>({
     username: {
         type: String,
         required: true,
@@ -40,8 +40,9 @@ const userSchema: Schema = new Schema({
         }
     },
     collections: {
-        type: [Types.ObjectId],
-        default: []
+        type: [Schema.Types.ObjectId],
+        default: [],
+        ref: CollectionModel
     }
 }, { timestamps: true });
 

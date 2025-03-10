@@ -11,6 +11,7 @@ import { ThemeProvider } from './context/theme/theme-provider.tsx'
 import { ToastContainer } from 'react-toastify';
 import FeaturesPage from './pages/features/page.tsx'
 import PricingPage from './pages/pricing/page.tsx'
+import { GoogleOAuthProvider } from "@react-oauth/google"
 
 const router = createBrowserRouter([
   {
@@ -47,9 +48,11 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <ThemeProvider defaultTheme="light" storageKey="snippet-manager-theme">
         <RouterProvider router={router} />
         <ToastContainer />
       </ThemeProvider>
+    </GoogleOAuthProvider>
   </StrictMode>,
 )
